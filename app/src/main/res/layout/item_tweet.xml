@@ -16,10 +16,11 @@
 
     <TextView
         android:id="@+id/tvUsername"
-        android:textSize="20sp"
-        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/ivProfile"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Username" />
@@ -28,7 +29,13 @@
         android:id="@+id/tvTweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:maxLines="3"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/ivProfile"
+        app:layout_constraintTop_toBottomOf="@+id/tvUsername"
         tools:text="This is a long tweet but its below 140 characters unless it isn't I wouldn't know I am not counting" />
 </androidx.constraintlayout.widget.ConstraintLayout>
