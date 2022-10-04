@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/ivProfile"
@@ -38,4 +39,16 @@
         app:layout_constraintStart_toEndOf="@+id/ivProfile"
         app:layout_constraintTop_toBottomOf="@+id/tvUsername"
         tools:text="This is a long tweet but its below 140 characters unless it isn't I wouldn't know I am not counting" />
+
+    <TextView
+        android:id="@+id/tvTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvTweet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="blah ago" />
 </androidx.constraintlayout.widget.ConstraintLayout>
