@@ -38,7 +38,9 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/ivProfile"
         app:layout_constraintTop_toBottomOf="@+id/tvUsername"
-        tools:text="This is a long tweet but its below 140 characters unless it isn't I wouldn't know I am not counting" />
+        tools:text="This is a long tweet but its below 140 characters unless it isn't I wouldn't know I am not counting"
+        android:autoLink="all"
+        android:linksClickable="true"/>
 
     <TextView
         android:id="@+id/tvTimestamp"

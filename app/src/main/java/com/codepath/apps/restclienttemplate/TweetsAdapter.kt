@@ -16,13 +16,15 @@ import com.bumptech.glide.Glide
 import com.codepath.apps.restclienttemplate.models.Tweet
 import java.text.ParseException
 import java.util.*
+import kotlin.collections.ArrayList
+
 private val TAG = "TweetsAdapter"
 private val SECOND_MILLIS = 1000;
 private val MINUTE_MILLIS = 60 * SECOND_MILLIS;
 private val HOUR_MILLIS = 60 * MINUTE_MILLIS;
 private val DAY_MILLIS = 24 * HOUR_MILLIS;
 
-class TweetsAdapter(val tweets: List<Tweet>) : RecyclerView.Adapter<TweetsAdapter.ViewHolder>() {
+class TweetsAdapter(val tweets: ArrayList<Tweet>) : RecyclerView.Adapter<TweetsAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -47,6 +49,16 @@ class TweetsAdapter(val tweets: List<Tweet>) : RecyclerView.Adapter<TweetsAdapte
 
     override fun getItemCount(): Int {
         return tweets.size
+    }
+
+    fun clear() {
+        tweets.clear()
+        notifyDataSetChanged()
+    }
+
+    fun addAll(tweetList: List<Tweet>) {
+        tweets.addAll(tweetList)
+        notifyDataSetChanged()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
