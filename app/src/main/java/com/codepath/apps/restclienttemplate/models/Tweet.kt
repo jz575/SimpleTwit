@@ -11,15 +11,15 @@ import org.json.JSONObject
 data class Tweet (
     var body: String,
     var createdAt: String,
+    var user: ArrayList<String>
 ) : Parcelable {
-    var user: User? = null
     companion object {
         fun fromJson(jsonObject: JSONObject): Tweet {
             val tweet = Tweet(
                 jsonObject.getString("text"),
                 jsonObject.getString("created_at"),
+                User.stringFromJson(jsonObject)
             )
-            tweet.user = User.fromJson(jsonObject.getJSONObject("user"))
             return tweet
         }
         fun fromJsonArray(jsonArray: JSONArray): List<Tweet> {

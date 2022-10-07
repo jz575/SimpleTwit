@@ -1,10 +1,14 @@
 package com.codepath.apps.restclienttemplate
 
+import android.app.Activity
+import android.content.Intent
 import android.icu.text.RelativeDateTimeFormatter
 import android.icu.text.SimpleDateFormat
 import android.os.Build
+import android.content.Context
 import android.text.format.DateUtils
 import android.util.Log
+import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,21 +18,22 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.codepath.apps.restclienttemplate.models.Tweet
+import com.codepath.apps.restclienttemplate.models.User
 import java.text.ParseException
 import java.util.*
 import kotlin.collections.ArrayList
 
 private val TAG = "TweetsAdapter"
 private val SECOND_MILLIS = 1000;
-private val MINUTE_MILLIS = 60 * SECOND_MILLIS;
-private val HOUR_MILLIS = 60 * MINUTE_MILLIS;
-private val DAY_MILLIS = 24 * HOUR_MILLIS;
+private val MINUTE_MILLIS = 60 * SECOND_MILLIS
+private val HOUR_MILLIS = 60 * MINUTE_MILLIS
+private val DAY_MILLIS = 24 * HOUR_MILLIS
 
-class TweetsAdapter(val tweets: ArrayList<Tweet>) : RecyclerView.Adapter<TweetsAdapter.ViewHolder>() {
+const val TWEET_EXTRA = "TWEET_EXTRA"
+class TweetsAdapter(private val context: Context, val tweets: ArrayList<Tweet>) : RecyclerView.Adapter<TweetsAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val context = parent.context
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.item_tweet, parent, false)
         return ViewHolder(view)
@@ -36,15 +41,8 @@ class TweetsAdapter(val tweets: ArrayList<Tweet>) : RecyclerView.Adapter<TweetsA
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val tweet: Tweet = tweets.get(position)
-
-        holder.tvUsername.text = tweet.user?.name
-        holder.tvTweet.text = tweet.body
-        Glide.with(holder.itemView)
-            .load(tweet.user?.publicImageUrl)
-            .into(holder.ivProfile)
-        //convert to relative timestamp
-        holder.tvTimestamp.text = getRelativeTimeAgo(tweet.createdAt)
+        val tweet = tweets[position]
+        holder.bind(tweet)
     }
 
     override fun getItemCount(): Int {
@@ -91,10 +89,40 @@ class TweetsAdapter(val tweets: ArrayList<Tweet>) : RecyclerView.Adapter<TweetsA
         return ""
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    fun tweetToUser(tweet: Tweet) : User {
+        val user = User()
+        user?.name = tweet.user[0]
+        user?.screenName = tweet.user[1]
+        user?.publicImageUrl = tweet.user[2]
+        return user
+    }
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
         val ivProfile = itemView.findViewById<ImageView>(R.id.ivProfile)
         val tvUsername = itemView.findViewById<TextView>(R.id.tvUsername)
         val tvTweet = itemView.findViewById<TextView>(R.id.tvTweet)
         val tvTimestamp = itemView.findViewById<TextView>(R.id.tvTimestamp)
+        init {
+            itemView.setOnClickListener(this)
+        }
+        @RequiresApi(Build.VERSION_CODES.N)
+        fun bind(tweet: Tweet) {
+            val user = tweetToUser(tweet)
+            tvUsername.text = user.name
+            tvTweet.text = tweet.body
+            Glide.with(itemView)
+                .load(user.publicImageUrl)
+                .into(ivProfile)
+            //convert to relative timestamp
+            tvTimestamp.text = getRelativeTimeAgo(tweet.createdAt)
+        }
+        override fun onClick(v: View?) {
+            val tweet = tweets[adapterPosition]
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(TWEET_EXTRA, tweet)
+            val activity: Activity = context as Activity
+            context.startActivity(intent)
+        }
     }
+
 }

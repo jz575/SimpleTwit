@@ -15,5 +15,13 @@ class User {
             user.publicImageUrl = jsonObject.getString("profile_image_url_https")
             return user
         }
+        fun stringFromJson(jsonObject: JSONObject): ArrayList<String> {
+            val strings = ArrayList<String>()
+            val user = jsonObject.getJSONObject("user")
+            strings.add(user.getString("name"))
+            strings.add(user.getString("screen_name"))
+            strings.add(user.getString("profile_image_url_https"))
+            return strings
+        }
     }
 }
