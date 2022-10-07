@@ -1,18 +1,24 @@
 package com.codepath.apps.restclienttemplate.models
 
+import android.os.Parcel
+import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 import org.json.JSONObject
 
-class Tweet {
-    var body: String = ""
-    var createdAt: String = ""
+@Parcelize
+data class Tweet (
+    var body: String,
+    var createdAt: String,
+) : Parcelable {
     var user: User? = null
-
     companion object {
         fun fromJson(jsonObject: JSONObject): Tweet {
-            val tweet = Tweet()
-            tweet.body = jsonObject.getString("text")
-            tweet.createdAt = jsonObject.getString("created_at")
+            val tweet = Tweet(
+                jsonObject.getString("text"),
+                jsonObject.getString("created_at"),
+            )
             tweet.user = User.fromJson(jsonObject.getJSONObject("user"))
             return tweet
         }
@@ -23,5 +29,9 @@ class Tweet {
             }
             return tweets
         }
+    }
+
+    override fun describeContents(): Int {
+        return 0
     }
 }
