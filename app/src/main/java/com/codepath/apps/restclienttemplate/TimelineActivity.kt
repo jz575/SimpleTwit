@@ -1,11 +1,14 @@
 package com.codepath.apps.restclienttemplate
 
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.codepath.apps.restclienttemplate.models.SampleModel
+import com.codepath.apps.restclienttemplate.models.SampleModelDao
 import com.codepath.apps.restclienttemplate.models.Tweet
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
 import okhttp3.Headers
@@ -18,6 +21,8 @@ class TimelineActivity : AppCompatActivity() {
     lateinit var rvTweets: RecyclerView
     lateinit var adapter: TweetsAdapter
     lateinit var swipeContainer: SwipeRefreshLayout
+
+    var sampleModelDao: SampleModelDao? = null
 
     val tweets = ArrayList<Tweet>()
 
@@ -62,6 +67,22 @@ class TimelineActivity : AppCompatActivity() {
                     tweets.addAll(newTweets)
                     adapter.notifyDataSetChanged()
                     swipeContainer.isRefreshing = false
+                    //add to database
+                    val models = ArrayList<SampleModel>()
+                    var sampleModel = SampleModel()
+                    sampleModelDao = (applicationContext as TwitterApplication).myDatabase?.sampleModelDao()
+                    for(i in 0 until tweets.size){
+                        sampleModel = SampleModel()
+                        sampleModel.body = tweets[i].body
+                        sampleModel.createdAt = tweets[i].createdAt
+                        sampleModel.name = tweets[i].user[0]
+                        sampleModel.screenName = tweets[i].user[1]
+                        sampleModel.publicImageUrl = tweets[i].user[2]
+                        models.add(sampleModel)
+                    }
+                    for(i in 0 until tweets.size){
+                        AsyncTask.execute { sampleModelDao?.insertModel(models[i]) }
+                    }
                 } catch (e:JSONException){
                     Log.e(TAG,"JSON Exception $e")
                 }

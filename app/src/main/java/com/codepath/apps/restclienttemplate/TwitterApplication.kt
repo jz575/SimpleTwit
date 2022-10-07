@@ -5,6 +5,9 @@ import android.content.Context
 import androidx.room.Room
 import com.codepath.oauth.OAuthBaseClient
 import com.facebook.stetho.Stetho
+import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.github.scribejava.httpclient.okhttp.OkHttpHttpClient
+import okhttp3.OkHttpClient
 
 /*
 * This is the Android application itself and is used to configure various settings

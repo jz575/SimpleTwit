@@ -19,7 +19,15 @@ class SampleModel(jsonObject: JSONObject? = null) {
 
     // Define table fields
     @ColumnInfo
+    var body: String? = null
+    @ColumnInfo
+    var createdAt: String? = null
+    @ColumnInfo
     var name: String? = null
+    @ColumnInfo
+    var screenName: String? = null
+    @ColumnInfo
+    var publicImageUrl: String? = null
 
     init {
         // Parse model from JSON
