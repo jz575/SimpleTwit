@@ -100,6 +100,7 @@ class TweetsAdapter(private val context: Context, val tweets: ArrayList<Tweet>) 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
         val ivProfile = itemView.findViewById<ImageView>(R.id.ivProfile)
         val tvUsername = itemView.findViewById<TextView>(R.id.tvUsername)
+        val tvName = itemView.findViewById<TextView>(R.id.tvName)
         val tvTweet = itemView.findViewById<TextView>(R.id.tvTweet)
         val tvTimestamp = itemView.findViewById<TextView>(R.id.tvTimestamp)
         init {
@@ -109,6 +110,7 @@ class TweetsAdapter(private val context: Context, val tweets: ArrayList<Tweet>) 
         fun bind(tweet: Tweet) {
             val user = tweetToUser(tweet)
             tvUsername.text = user.name
+            tvName.text = "@" + user.screenName
             tvTweet.text = tweet.body
             Glide.with(itemView)
                 .load(user.publicImageUrl)

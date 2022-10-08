@@ -2,12 +2,12 @@ package com.codepath.apps.restclienttemplate
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.codepath.apps.restclienttemplate.models.SampleModel
-import com.codepath.apps.restclienttemplate.models.SampleModelDao
+import com.codepath.apps.restclienttemplate.models.SavedTweet
+import com.codepath.apps.restclienttemplate.models.SavedTweetDao
 
-@Database(entities = [SampleModel::class], version = 1)
+@Database(entities = [SavedTweet::class], version = 2)
 abstract class MyDatabase : RoomDatabase() {
-    abstract fun sampleModelDao(): SampleModelDao?
+    abstract fun savedTweetDao(): SavedTweetDao?
 
     companion object {
         // Database name to be used

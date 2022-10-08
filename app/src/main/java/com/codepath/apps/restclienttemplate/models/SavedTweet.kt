@@ -13,7 +13,7 @@ import org.json.JSONObject
 *
 */
 @Entity
-class SampleModel(jsonObject: JSONObject? = null) {
+class SavedTweet(jsonObject: JSONObject? = null) {
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null
 

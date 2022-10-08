@@ -11,8 +11,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.codepath.apps.restclienttemplate.models.SampleModel
-import com.codepath.apps.restclienttemplate.models.SampleModelDao
+import com.codepath.apps.restclienttemplate.models.SavedTweet
+import com.codepath.apps.restclienttemplate.models.SavedTweetDao
 import com.codepath.apps.restclienttemplate.models.Tweet
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
 import okhttp3.Headers
@@ -26,7 +26,7 @@ class TimelineActivity : AppCompatActivity() {
     lateinit var adapter: TweetsAdapter
     lateinit var swipeContainer: SwipeRefreshLayout
 
-    var sampleModelDao: SampleModelDao? = null
+    var savedTweetDao: SavedTweetDao? = null
 
     val tweets = ArrayList<Tweet>()
 
@@ -55,6 +55,7 @@ class TimelineActivity : AppCompatActivity() {
             android.R.color.holo_red_light)
 
         populateHomeTimeline()
+        if(!isNetworkAvailable()) Toast.makeText(this,"No Internet",Toast.LENGTH_SHORT).show()
     }
 
     fun populateHomeTimeline() {
@@ -71,21 +72,21 @@ class TimelineActivity : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                     swipeContainer.isRefreshing = false
                     //add to database
-                    val models = ArrayList<SampleModel>()
-                    var sampleModel: SampleModel
-                    sampleModelDao = (applicationContext as TwitterApplication).myDatabase?.sampleModelDao()
+                    val models = ArrayList<SavedTweet>()
+                    var savedTweet: SavedTweet
+                    savedTweetDao = (applicationContext as TwitterApplication).myDatabase?.savedTweetDao()
                     for(i in 0 until tweets.size){
-                        sampleModel = SampleModel()
-                        sampleModel.id = i.toLong()
-                        sampleModel.body = tweets[i].body
-                        sampleModel.createdAt = tweets[i].createdAt
-                        sampleModel.name = tweets[i].user[0]
-                        sampleModel.screenName = tweets[i].user[1]
-                        sampleModel.publicImageUrl = tweets[i].user[2]
-                        models.add(sampleModel)
+                        savedTweet = SavedTweet()
+                        savedTweet.id = i.toLong()
+                        savedTweet.body = tweets[i].body
+                        savedTweet.createdAt = tweets[i].createdAt
+                        savedTweet.name = tweets[i].user[0]
+                        savedTweet.screenName = tweets[i].user[1]
+                        savedTweet.publicImageUrl = tweets[i].user[2]
+                        models.add(savedTweet)
                     }
                     for(i in 0 until tweets.size){
-                        AsyncTask.execute { sampleModelDao?.insertModel(models[i]) }
+                        AsyncTask.execute { savedTweetDao?.insertModel(models[i]) }
                     }
                 } catch (e:JSONException){
                     Log.e(TAG,"JSON Exception $e")
@@ -100,9 +101,9 @@ class TimelineActivity : AppCompatActivity() {
             ) {
                 Log.e(TAG,"API call failed $statusCode")
                 try {
-                    sampleModelDao = (applicationContext as TwitterApplication).myDatabase?.sampleModelDao()
-                    val sampleModels = sampleModelDao?.recentItems()
-                    val newTweets = Tweet.fromSampleModels(sampleModels)
+                    savedTweetDao = (applicationContext as TwitterApplication).myDatabase?.savedTweetDao()
+                    val savedTweets = savedTweetDao?.recentItems()
+                    val newTweets = Tweet.fromSavedTweets(savedTweets)
                     tweets.addAll(newTweets)
                     swipeContainer.isRefreshing = false
                     adapter.notifyDataSetChanged()

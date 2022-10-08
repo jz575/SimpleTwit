@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "60d20889b25394fef15e6ecdd862ea8d",
+    "identityHash": "6c938ed87a9021673730e2d2c3a2771e",
     "entities": [
       {
-        "tableName": "SampleModel",
+        "tableName": "SavedTweet",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `body` TEXT, `createdAt` TEXT, `name` TEXT, `screenName` TEXT, `publicImageUrl` TEXT)",
         "fields": [
           {
@@ -58,7 +58,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '60d20889b25394fef15e6ecdd862ea8d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6c938ed87a9021673730e2d2c3a2771e')"
     ]
   }
 }

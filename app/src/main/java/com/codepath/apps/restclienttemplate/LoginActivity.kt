@@ -1,19 +1,18 @@
 package com.codepath.apps.restclienttemplate
 
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.View
-import com.codepath.apps.restclienttemplate.models.SampleModel
-import com.codepath.apps.restclienttemplate.models.SampleModelDao
+import com.codepath.apps.restclienttemplate.models.SavedTweet
+import com.codepath.apps.restclienttemplate.models.SavedTweetDao
 import com.codepath.oauth.OAuthLoginActionBarActivity
 
 private val TAG = "LoginActivity"
 class LoginActivity : OAuthLoginActionBarActivity<TwitterClient>() {
 
-    var sampleModelDao: SampleModelDao? = null
+    var savedTweetDao: SavedTweetDao? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,9 +20,9 @@ class LoginActivity : OAuthLoginActionBarActivity<TwitterClient>() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setLogo(R.mipmap.ic_launcher)
         supportActionBar?.setDisplayUseLogoEnabled(true)
-        val sampleModel = SampleModel()
-        sampleModel.name = "CodePath"
-        sampleModelDao = (applicationContext as TwitterApplication).myDatabase?.sampleModelDao()
+        val savedTweet = SavedTweet()
+        savedTweet.name = "CodePath"
+        savedTweetDao = (applicationContext as TwitterApplication).myDatabase?.savedTweetDao()
         //AsyncTask.execute { sampleModelDao?.insertModel(sampleModel) }
     }
 

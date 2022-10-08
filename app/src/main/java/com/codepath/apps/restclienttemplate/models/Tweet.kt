@@ -1,8 +1,6 @@
 package com.codepath.apps.restclienttemplate.models
 
-import android.os.Parcel
 import android.os.Parcelable
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 import org.json.JSONObject
@@ -29,24 +27,24 @@ data class Tweet (
             }
             return tweets
         }
-        fun fromSampleModel(sampleModel: SampleModel?) : Tweet {
-            val body = sampleModel?.body ?: ""
-            val createdAt = sampleModel?.createdAt ?: ""
+        fun fromSavedTweet(savedTweet: SavedTweet?) : Tweet {
+            val body = savedTweet?.body ?: ""
+            val createdAt = savedTweet?.createdAt ?: ""
             val user = ArrayList<String>()
-            val name = sampleModel?.name ?: ""
-            val screenName = sampleModel?.screenName ?: ""
-            val publicImgUrl = sampleModel?.publicImageUrl ?: ""
+            val name = savedTweet?.name ?: ""
+            val screenName = savedTweet?.screenName ?: ""
+            val publicImgUrl = savedTweet?.publicImageUrl ?: ""
             user.add(name)
             user.add(screenName)
             user.add(publicImgUrl)
             val tweet = Tweet(body, createdAt, user)
             return tweet
         }
-        fun fromSampleModels(sampleModels: List<SampleModel?>?) : List<Tweet> {
+        fun fromSavedTweets(savedTweets: List<SavedTweet?>?) : List<Tweet> {
             val tweets = ArrayList<Tweet>()
-            val size = sampleModels?.size ?: 0
+            val size = savedTweets?.size ?: 0
             for(i in 0 until size){
-                tweets.add(fromSampleModel(sampleModels?.get(i)))
+                tweets.add(fromSavedTweet(savedTweets?.get(i)))
             }
             return tweets
         }

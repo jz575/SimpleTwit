@@ -53,4 +53,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="blah ago" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvTweet"
+        app:layout_constraintStart_toEndOf="@+id/tvUsername"
+        tools:text="handle" />
 </androidx.constraintlayout.widget.ConstraintLayout>
