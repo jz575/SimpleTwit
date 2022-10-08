@@ -29,6 +29,27 @@ data class Tweet (
             }
             return tweets
         }
+        fun fromSampleModel(sampleModel: SampleModel?) : Tweet {
+            val body = sampleModel?.body ?: ""
+            val createdAt = sampleModel?.createdAt ?: ""
+            val user = ArrayList<String>()
+            val name = sampleModel?.name ?: ""
+            val screenName = sampleModel?.screenName ?: ""
+            val publicImgUrl = sampleModel?.publicImageUrl ?: ""
+            user.add(name)
+            user.add(screenName)
+            user.add(publicImgUrl)
+            val tweet = Tweet(body, createdAt, user)
+            return tweet
+        }
+        fun fromSampleModels(sampleModels: List<SampleModel?>?) : List<Tweet> {
+            val tweets = ArrayList<Tweet>()
+            val size = sampleModels?.size ?: 0
+            for(i in 0 until size){
+                tweets.add(fromSampleModel(sampleModels?.get(i)))
+            }
+            return tweets
+        }
     }
 
     override fun describeContents(): Int {

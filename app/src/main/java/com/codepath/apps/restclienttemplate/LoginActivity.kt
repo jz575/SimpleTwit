@@ -24,7 +24,7 @@ class LoginActivity : OAuthLoginActionBarActivity<TwitterClient>() {
         val sampleModel = SampleModel()
         sampleModel.name = "CodePath"
         sampleModelDao = (applicationContext as TwitterApplication).myDatabase?.sampleModelDao()
-        AsyncTask.execute { sampleModelDao?.insertModel(sampleModel) }
+        //AsyncTask.execute { sampleModelDao?.insertModel(sampleModel) }
     }
 
 

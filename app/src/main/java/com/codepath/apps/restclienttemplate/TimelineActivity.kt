@@ -1,9 +1,13 @@
 package com.codepath.apps.restclienttemplate
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -27,6 +31,7 @@ class TimelineActivity : AppCompatActivity() {
     val tweets = ArrayList<Tweet>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_timeline)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -41,7 +46,7 @@ class TimelineActivity : AppCompatActivity() {
 
         swipeContainer = findViewById(R.id.swipeContainer)
         swipeContainer.setOnRefreshListener {
-            Log.i(TAG, " Refreshing Timeline")
+            Log.i(TAG, "Refreshing Timeline")
             populateHomeTimeline()
         }
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -50,14 +55,12 @@ class TimelineActivity : AppCompatActivity() {
             android.R.color.holo_red_light)
 
         populateHomeTimeline()
-
     }
 
     fun populateHomeTimeline() {
         client.getHomeTimeline(object: JsonHttpResponseHandler() {
-
             override fun onSuccess(statusCode: Int, headers: Headers, json: JSON) {
-                Log.i(TAG,"API call successful")
+                Log.i(TAG,"on Success API call successful")
 
                 val jsonArray = json.jsonArray
 
@@ -69,10 +72,11 @@ class TimelineActivity : AppCompatActivity() {
                     swipeContainer.isRefreshing = false
                     //add to database
                     val models = ArrayList<SampleModel>()
-                    var sampleModel = SampleModel()
+                    var sampleModel: SampleModel
                     sampleModelDao = (applicationContext as TwitterApplication).myDatabase?.sampleModelDao()
                     for(i in 0 until tweets.size){
                         sampleModel = SampleModel()
+                        sampleModel.id = i.toLong()
                         sampleModel.body = tweets[i].body
                         sampleModel.createdAt = tweets[i].createdAt
                         sampleModel.name = tweets[i].user[0]
@@ -95,8 +99,23 @@ class TimelineActivity : AppCompatActivity() {
                 throwable: Throwable?
             ) {
                 Log.e(TAG,"API call failed $statusCode")
+                try {
+                    sampleModelDao = (applicationContext as TwitterApplication).myDatabase?.sampleModelDao()
+                    val sampleModels = sampleModelDao?.recentItems()
+                    val newTweets = Tweet.fromSampleModels(sampleModels)
+                    tweets.addAll(newTweets)
+                    swipeContainer.isRefreshing = false
+                    adapter.notifyDataSetChanged()
+                } catch (e: Exception) {
+                    Log.e(TAG, "Could not update adapter")
+                }
             }
         })
+    }
+    fun isNetworkAvailable(): Boolean {
 
+        val connectivityManager: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 }

@@ -13,7 +13,7 @@ interface SampleModelDao {
     @Query("SELECT * FROM SampleModel WHERE id = :id")
     fun byId(id: Long): SampleModel?
 
-    @Query("SELECT * FROM SampleModel ORDER BY ID DESC LIMIT 300")
+    @Query("SELECT * FROM SampleModel ORDER BY ID ASC LIMIT 15")
     fun recentItems(): List<SampleModel?>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
