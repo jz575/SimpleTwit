@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -68,10 +69,10 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.compose) {
+        //if (item.itemId == R.id.compose) {
             val intent = Intent(this, ComposeActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE)
-        }
+        //}
         return super.onOptionsItemSelected(item)
     }
 
@@ -84,7 +85,10 @@ class TimelineActivity : AppCompatActivity() {
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
-
+    fun toCompose(view: View) {
+        val intent = Intent(this, ComposeActivity::class.java)
+        startActivityForResult(intent, REQUEST_CODE)
+    }
     fun populateHomeTimeline() {
         client.getHomeTimeline(object: JsonHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Headers, json: JSON) {
