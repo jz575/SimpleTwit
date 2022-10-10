@@ -1,12 +1,15 @@
 package com.codepath.apps.restclienttemplate
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +22,7 @@ import okhttp3.Headers
 import org.json.JSONException
 
 private val TAG = "TimelineActivity"
+val REQUEST_CODE= 10
 class TimelineActivity : AppCompatActivity() {
 
     lateinit var client: TwitterClient
@@ -56,6 +60,29 @@ class TimelineActivity : AppCompatActivity() {
 
         populateHomeTimeline()
         if(!isNetworkAvailable()) Toast.makeText(this,"No Internet",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.compose) {
+            val intent = Intent(this, ComposeActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            val tweet = data?.getParcelableExtra("tweet") as Tweet
+            tweets.add(0, tweet)
+            adapter.notifyDataSetChanged()
+            rvTweets.smoothScrollToPosition(0)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     fun populateHomeTimeline() {
