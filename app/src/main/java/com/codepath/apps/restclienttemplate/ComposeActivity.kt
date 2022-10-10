@@ -1,12 +1,16 @@
 package com.codepath.apps.restclienttemplate
 
 import android.content.Intent
+import android.graphics.Color
 import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.codepath.apps.restclienttemplate.models.Tweet
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
@@ -17,13 +21,37 @@ class ComposeActivity : AppCompatActivity() {
     lateinit var client: TwitterClient
     lateinit var etCompose: EditText
     lateinit var btnTweet: Button
+    lateinit var tvCharCount: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_compose)
 
         etCompose = findViewById(R.id.etTweet)
         btnTweet = findViewById(R.id.btnTweet)
+        tvCharCount = findViewById(R.id.tvCharCount)
         client = TwitterApplication.getRestClient(this)
+
+        etCompose.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                var count = etCompose.text.length
+                if (count > 280) count = 280
+                val text = (280-count).toString() + " characters remaining"
+                tvCharCount.text = text
+
+                if (etCompose.text.length > 279) etCompose.setTextColor(Color.RED)
+                else etCompose.setTextColor(Color.BLACK)
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
 
         btnTweet.setOnClickListener() {
             //grab text from
